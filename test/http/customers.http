@@ -1,0 +1,53 @@
+@localhost=localhost:4004/odata/v4/main
+@id=2076be6c-fa52-4b1e-b1a0-434275c67aba
+
+
+# entity Customers {
+#     key id: UUID;
+#     firstName: String(20);
+#     lastName: String(100);
+#     email: String(255);
+# }
+
+###
+
+GET http://{{localhost}}/Customers
+Content-Type: application/json
+
+###
+POST http://{{localhost}}/Customers
+Content-Type: application/json
+
+{
+    "id": "{{id}}",
+    "firstName": "Lucas",
+    "lastName": "Cardoso",
+    "email": "lucas.cardoso@moovi.com"
+}
+
+###
+PUT http://{{localhost}}/Customers(id={{id}})
+Content-Type: application/json
+
+{
+    "firstName": "Lucas..."
+}
+
+###
+DELETE http://{{localhost}}/Customers({{id}})
+Content-Type: application/json
+
+
+###
+
+#usando $search
+
+GET http://{{localhost}}/Customers?$search=544
+Content-Type: application/json
+
+###
+
+#usando $orderby
+
+GET http://{{localhost}}/Customers?$orderby=firstName desc
+Content-Type: application/json
