@@ -1,4 +1,8 @@
-function f1(p1: string) {
-  console.log("Function f1 called: p1=" + p1);
+import { Service } from '@sap/cds';
+import { Customers } from '@models/sales';
+
+export default (service: Service)=>{
+    service.after('READ', 'Customers', (results: Customers)=>{
+        console.log('>>> Results from Customers:', results);
+    })
 }
-f1("test");
