@@ -21,6 +21,7 @@
   "scripts": {
     "start": "cds-serve",
     "dev_old": "cds watch",
-    "dev": "DEBUG=db cds-tsx watch"
+    "dev_debug_db": "DEBUG=db cds-tsx watch",
+    "dev": "cds-tsx watch"
   }
 }
