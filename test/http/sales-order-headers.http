@@ -1,4 +1,6 @@
 @localhost=localhost:4004/odata/v4/main
+@product_id1=16481621-8d52-425b-ae38-8f816e87682f
+@product_id2=14195958-1289-41ea-9d06-865a9eaf09b5
 
 ###
 
@@ -12,7 +14,24 @@ Content-Type: application/json
 
 {
     "id": "1234",
-    "customer_id": "29054544-234b-4ee7-9557-9d5c75e4b03b"
+    "customer_id": "29054544-234b-4ee7-9557-9d5c75e4b03b",
+    "totalAmount": 398,
+    "items": [
+        {
+            "header_id": "1234",
+            "id": "10",
+            "product_id": "{{product_id1}}",
+            "quantity": 10,
+            "price": 2.99
+        },
+        {
+            "header_id": "1234",
+            "id": "20",
+            "product_id": "{{product_id2}}",
+            "quantity": 10,
+            "price": 2.98
+        }
+    ]
 }
 
 ###
