@@ -10,7 +10,7 @@
             "auth": {
                 "kind": "basic",
                 "users": {
-                    "admin": {
+                    "eric": {
                         "password": "abcd1234",
                         "roles": ["admin"],
                         "attr": {
