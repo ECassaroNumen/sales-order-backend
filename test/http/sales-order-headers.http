@@ -13,22 +13,22 @@ POST http://{{localhost}}/SalesOrderHeaders
 Content-Type: application/json
 
 {
-    "id": "1234",
+    "id": "123",
     "customer_id": "29054544-234b-4ee7-9557-9d5c75e4b03b",
     "totalAmount": 398,
     "items": [
         {
-            "header_id": "1234",
-            "id": "10",
-            "product_id": "{{product_id1}}",
+            "header_id": "123",
+            "id": "11",
+            "product_id": "{{product_id2}}",
             "quantity": 10,
             "price": 2.99
         },
         {
-            "header_id": "1234",
-            "id": "20",
+            "header_id": "123",
+            "id": "21",
             "product_id": "{{product_id2}}",
-            "quantity": 10,
+            "quantity": 15,
             "price": 2.98
         }
     ]
