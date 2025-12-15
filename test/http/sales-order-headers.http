@@ -11,7 +11,7 @@ Content-Type: application/json
 
 POST http://{{localhost}}/SalesOrderHeaders
 Content-Type: application/json
-
+Authorization: Basic joaozinho:abcd1234
 {
     "id": "123",
     "customer_id": "29054544-234b-4ee7-9557-9d5c75e4b03b",

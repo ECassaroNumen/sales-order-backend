@@ -12,7 +12,7 @@
                 "users": {
                     "eric": {
                         "password": "abcd1234",
-                        "roles": ["admin"],
+                        "roles": ["admin","read_only_user"],
                         "attr": {
                             "id": 1,
                             "groups": ["group1", "group2"]
