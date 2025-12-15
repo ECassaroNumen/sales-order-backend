@@ -1,5 +1,5 @@
 {
-    "[development_sqn]": {
+    "[development]": {
         "requires": {
             "db": {
                 "credentials": {
