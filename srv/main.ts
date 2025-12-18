@@ -57,11 +57,15 @@ export default (service: Service)=>{
         items.forEach((item) => {
             totalAmount += ( (item.price as number) * (item.quantity as number) );
         });
+        if (totalAmount > 30000) {
+            const discount = totalAmount * 0.1;
+            totalAmount = totalAmount - discount;
+        }
         request.data.totalAmount = totalAmount;
     });
 
-    service.after('CREATE', 'SalesOrderHeaders', async (results: SalesOrderHeaders)=>{
-        const headerAsArray: SalesOrderHeaders = Array.isArray(results) ? results : [results];
+    service.after('CREATE', 'SalesOrderHeaders', async (results: SalesOrderHeaders, request: Request)=>{
+        const headerAsArray: SalesOrderHeaders = Array.isArray(results) ? results : [results];        
 
         for (const header of headerAsArray) {
             const items  = header.items as SalesOrderItems;
@@ -79,6 +83,16 @@ export default (service: Service)=>{
                     await cds.update('sales.Products').where( { id: foundProduct.id } ).with({ stock: foundProduct.stock });
                 }
             }
+
+            const headerAsString = JSON.stringify(header);
+            const userAsString = JSON.stringify(request.user);
+            const log = [{
+                header_id: header.id,
+                orderData: headerAsString,
+                userData: userAsString
+            }];            
+
+            await cds.create('sales.SalesOrderLogs').entries(log);
         }
     });
 }

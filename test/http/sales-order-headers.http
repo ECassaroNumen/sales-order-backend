@@ -17,21 +17,20 @@ Authorization: Basic eric:abcd1234
 {
     "id": "{{id}}",
     "customer_id": "29054544-234b-4ee7-9557-9d5c75e4b03b",
-    "totalAmount": 398,
     "items": [
         {
             "header_id": "{{id}}",
             "id": "11",
             "product_id": "{{product_id2}}",
             "quantity": 10,
-            "price": 2.99
+            "price": 2000
         },
         {
             "header_id": "{{id}}",
             "id": "21",
             "product_id": "{{product_id2}}",
             "quantity": 15,
-            "price": 2.98
+            "price": 1000
         }
     ]
 }
