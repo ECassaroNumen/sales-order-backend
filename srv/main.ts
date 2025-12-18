@@ -52,6 +52,12 @@ export default (service: Service)=>{
                 request.reject(400, `Product ${dbProduct.name} is out of stock`);
             }
         }
+
+        let totalAmount = 0;
+        items.forEach((item) => {
+            totalAmount += ( (item.price as number) * (item.quantity as number) );
+        });
+        request.data.totalAmount = totalAmount;
     });
 
     service.after('CREATE', 'SalesOrderHeaders', async (results: SalesOrderHeaders)=>{
