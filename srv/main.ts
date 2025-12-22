@@ -1,5 +1,8 @@
 import cds, { Request, Service } from '@sap/cds';
 import { Customers, Products, SalesOrderItem, SalesOrderItems, SalesOrderHeader, SalesOrderHeaders } from '@models/sales';
+import { customerController } from './factories/controllers/customer';
+import { request } from 'http';
+import { FullRequestParams } from './protocols';
 
 export default (service: Service)=>{
     service.before('READ',"*", (req: Request)=>{
@@ -7,14 +10,15 @@ export default (service: Service)=>{
             req.reject(403, 'Forbidden. Precisaria ser read_only_user');
         }
     });
+
     service.before(['WRITE','DELETE'],"*", (req: Request)=>{
         if (!req.user.is('admin')) {
             req.reject(403, 'Forbidden.  Precisaria ser admin');
         }
     });    
 
-    service.after('READ', 'Customers', (results: Customers)=>{
-        // console.log('>>> Results from Customers:', results);
+    service.after('READ', 'Customers', (customersList: Customers, request)=>{
+        (request as unknown as FullRequestParams<Customers>).results = customerController.afterRead(customersList);
     })
 
     service.before('CREATE', 'SalesOrderHeaders', async (request: Request)=>{
