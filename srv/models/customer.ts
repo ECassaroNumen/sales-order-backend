@@ -3,7 +3,7 @@
 // lastName: String(100);
 // email: String(255);
 
-type CustomerProps = {
+export type CustomerProps = {
     id: string;
     firstName: string;
     lastName: string;
@@ -13,23 +13,23 @@ type CustomerProps = {
 export class CustomerModel {
     constructor(private props: CustomerProps ) { }
 
-    public static create(props: CustomerProps): CustomerModel {
+    public static with(props: CustomerProps): CustomerModel {
         return new CustomerModel(props);
     }
 
-    public get_id(): string {
+    public get id(): string {
         return this.props.id;
     }
 
-    public get_firstName(): string {
+    public get firstName(): string {
         return this.props.firstName;
     }
 
-    public get_lastName(): string {
+    public get lastName(): string {
         return this.props.lastName;
     }
 
-    public get_email(): string {
+    public get email(): string {
         return this.props.email;
     }
 
