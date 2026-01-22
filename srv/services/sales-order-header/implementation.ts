@@ -1,4 +1,4 @@
-import { SalesOrderHeader, SalesOrderItem } from "@models/sales";
+import { SalesOrderHeader, SalesOrderHeaders, SalesOrderItem } from "@models/sales";
 import { SalesOrderHeaderService, CreationPayloadValidationResult } from "./protocol";
 import { SalesOrderHeaderModel } from '../../models/sales-order-header';
 import { SalesOrderItemModel } from '../../models/sales-order-item';
@@ -6,11 +6,16 @@ import { ProductRepository } from "srv/repositories/product/protocols";
 import { CustomerRepository } from "srv/repositories/customer/protocols";
 import { ProductModel } from "srv/models/products";
 import { CustomerModel } from "srv/models/customer";
+import { SalesOrderLogModel } from "srv/models/sales-order-logs";
+import { SalesOrderLogRepository } from "srv/repositories/sales-order-log/protocols";
+import { User } from "@sap/cds";
+import { LoggedUserModel } from "srv/models/logged-user";
 
 export class SalesOrderHeaderServiceImpl implements SalesOrderHeaderService {
     constructor(
         private readonly customerRepository: CustomerRepository,
-        private readonly productRepository: ProductRepository
+        private readonly productRepository: ProductRepository,
+        private readonly salesOrderLogRepository: SalesOrderLogRepository
     ) {}
 
     public async beforeCreate(params: SalesOrderHeader): Promise<CreationPayloadValidationResult> {
@@ -40,6 +45,27 @@ export class SalesOrderHeaderServiceImpl implements SalesOrderHeaderService {
         };
     }
 
+    public async afterCreate(params: SalesOrderHeaders, loggedUser: User): Promise<void> {
+        const headerAsArray = Array.isArray(params) ? params : [params] as SalesOrderHeaders;        
+        const logs: SalesOrderLogModel[] = [];
+        for (const header of headerAsArray) {
+            const products = await this.getProductsByIds(header) as ProductModel[];
+            const items = this.getSalesOrderItems(header, products);
+            const salesOrderHeader = this.getExistingSalesOrderHeader(header, items);            
+            const productsData = salesOrderHeader.getProductsData();
+            for (const product of products) {
+                const foundProduct = productsData.find( (productData) => productData.id === product.id );
+                product.sell(foundProduct?.quantity as number);
+                await this.productRepository.updateStock(product);
+            }
+            const user = this.getLoggedUser(loggedUser);
+            const log = this.getSalesOrderLog(salesOrderHeader, user);
+            logs.push(log);
+        }
+
+        await this.salesOrderLogRepository.create(logs);
+    }
+
     private async getProductsByIds(params: SalesOrderHeader): Promise<ProductModel[] | null> {
         const productsIds: string[] = params.items?.map((item: SalesOrderItem)=> item.product_id) as string[];
         return this.productRepository.findByIds(productsIds);
@@ -61,7 +87,35 @@ export class SalesOrderHeaderServiceImpl implements SalesOrderHeaderService {
         });
     }
 
+    private getExistingSalesOrderHeader(params: SalesOrderHeader, items: SalesOrderItemModel[]): SalesOrderHeaderModel {
+        return SalesOrderHeaderModel.with({
+            id: params.id as string,
+            customer_id: params.customer_id as string,
+            totalAmount: params.totalAmount as number,
+            items
+        });
+    }
+
     private getCustomerById(customerId: string): Promise<CustomerModel | null> {
         return this.customerRepository.findById(customerId);
+    }
+
+    private getLoggedUser(loggedUser: User): LoggedUserModel {
+        return LoggedUserModel.create({
+            id: loggedUser.id,
+            roles: loggedUser.roles as string[],
+            attributes: {
+                id: loggedUser.attr.id as unknown as number,
+                groups: loggedUser.attr.groups as unknown as string[]
+            }
+        });
+    }
+    
+    private getSalesOrderLog(salesOrderHeader: SalesOrderHeaderModel, user: LoggedUserModel): SalesOrderLogModel {    
+        return SalesOrderLogModel.create({
+            headerId: salesOrderHeader.id,
+            orderData: salesOrderHeader.toStringfiedObject(),
+            userData: user.toStringfiedObject()
+        });
     }
 }
