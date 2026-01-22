@@ -12,7 +12,7 @@ type SalesOrderHeaderProps = {
     items: SalesOrderItemModel[];
 }
 
-type SalesOrderHeaderPropsWithoutTotalAmount = Omit<SalesOrderHeaderProps, 'id' | 'totalAmount'>;
+type SalesOrderHeaderPropsWithoutIdAndTotalAmount = Omit<SalesOrderHeaderProps, 'id' | 'totalAmount'>;
 
 type CreationPayload = {
     customer_id: SalesOrderHeaderProps['customer_id'];
@@ -26,13 +26,16 @@ type CreationPayloadValidationResult = {
 export class SalesOrderHeaderModel {
     constructor(private props: SalesOrderHeaderProps) {}
 
-    public static create(props: SalesOrderHeaderPropsWithoutTotalAmount): SalesOrderHeaderModel {
+    public static create(props: SalesOrderHeaderPropsWithoutIdAndTotalAmount): SalesOrderHeaderModel {
         return new SalesOrderHeaderModel({
             ...props,
             id: crypto.randomUUID(),
             totalAmount: 0,
         });
     }
+
+    public static with(props: SalesOrderHeaderProps): SalesOrderHeaderModel {
+        return new SalesOrderHeaderModel(props);}
     
     public get id(): string {
         return this.props.id;
@@ -115,4 +118,15 @@ export class SalesOrderHeaderModel {
         }
         return totalAmount;        
     };
+
+    public getProductsData(): {id: string; quantity: number }[] {
+        return this.items.map(item => ({
+            id: item.productId,
+            quantity: item.quantity,
+        }));
+    }
+
+    public toStringfiedObject(): string {
+        return JSON.stringify(this.props);
+    }
 }
