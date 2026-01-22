@@ -1,3 +1,5 @@
+import { User } from "@sap/cds";
+
 import { SalesOrderHeader, SalesOrderHeaders, SalesOrderItem } from "@models/sales";
 import { SalesOrderHeaderService, CreationPayloadValidationResult } from "./protocol";
 import { SalesOrderHeaderModel } from '../../models/sales-order-header';
@@ -8,7 +10,6 @@ import { ProductModel } from "srv/models/products";
 import { CustomerModel } from "srv/models/customer";
 import { SalesOrderLogModel } from "srv/models/sales-order-logs";
 import { SalesOrderLogRepository } from "srv/repositories/sales-order-log/protocols";
-import { User } from "@sap/cds";
 import { LoggedUserModel } from "srv/models/logged-user";
 
 export class SalesOrderHeaderServiceImpl implements SalesOrderHeaderService {

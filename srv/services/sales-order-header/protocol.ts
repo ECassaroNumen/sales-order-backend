@@ -1,4 +1,5 @@
 import { User } from "@sap/cds";
+
 import { SalesOrderHeader, SalesOrderHeaders } from "@models/sales";
 
 export type CreationPayloadValidationResult = {
