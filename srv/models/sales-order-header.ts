@@ -3,7 +3,7 @@
 // totalAmount: Decimal(15,2);
 // items: Composition of many SalesOrderItems on items.header = $self;
 
-import { SalesOrderItemModel } from "./sales-order-item";
+import { SalesOrderItemModel } from './sales-order-item';
 
 type SalesOrderHeaderProps = {
     id: string;

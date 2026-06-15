@@ -1,8 +1,8 @@
-import cds from "@sap/cds";
+import cds from '@sap/cds';
 
-import { ProductModel, ProductProps } from "srv/models/products.js";
-import { ProductRepository } from "./protocols.js";
-import { Products } from "@models/sales";
+import { ProductModel, ProductProps } from 'srv/models/products.js';
+import { ProductRepository } from './protocols.js';
+import { Products } from '@models/sales';
 
 export class ProductRepositoryImpl implements ProductRepository {
     public async findByIds(ids: ProductProps['id'][]): Promise<ProductModel[] | null> {

@@ -1,10 +1,10 @@
-    // key id: UUID;
-    // header: Association to SalesOrderHeaders;
-    // product: Association to Products;
-    // quantity: Integer;
-    // price: Decimal(15,2);
+// key id: UUID;
+// header: Association to SalesOrderHeaders;
+// product: Association to Products;
+// quantity: Integer;
+// price: Decimal(15,2);
 
-import { ProductModel } from "./products";
+import { ProductModel } from './products';
 
 export type SalesOrderItemProps = {
     id: string;

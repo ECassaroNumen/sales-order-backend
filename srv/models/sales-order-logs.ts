@@ -18,8 +18,8 @@ type SalesOrderLogDbProps = Omit<SalesOrderLogProps, 'headerId'> & {
     header_id: string;
 };
 
-export class SalesOrderLogModel {   
-    constructor(private props: SalesOrderLogProps) {}
+export class SalesOrderLogModel {
+    constructor(private props: SalesOrderLogProps) { }
 
     public static create(props: SalesOrderLogWithoutIdProps): SalesOrderLogModel {
         return new SalesOrderLogModel({
@@ -42,7 +42,7 @@ export class SalesOrderLogModel {
 
     public get orderData(): string {
         return this.props.orderData;
-    }   
+    }
 
     public toObject(): SalesOrderLogDbProps {
         return {
@@ -51,5 +51,5 @@ export class SalesOrderLogModel {
             userData: this.userData,
             orderData: this.orderData
         };
-    }    
+    }
 }
